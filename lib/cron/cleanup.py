@@ -7,7 +7,7 @@ import django
 django.setup()
 
 from django.conf import settings
-from packrat.Repos.models import Package, PackageFile
+from packrat.Package.models import Package, PackageFile
 
 # clean up deprocated files
 for package in Package.objects.all():

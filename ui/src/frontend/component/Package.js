@@ -71,6 +71,7 @@ class Package extends React.Component
                 <tbody>
                   <tr><th>Name</th><td>{ package_.name }</td></tr>
                   <tr><th>Deprocated Count</th><td>{ package_.deprocated_count }</td></tr>
+                  <tr><th>Failed Count</th><td>{ package_.failed_count }</td></tr>
                   <tr><th>Created</th><td>{ package_.created }</td></tr>
                   <tr><th>Updated</th><td>{ package_.updated }</td></tr>
                 </tbody>

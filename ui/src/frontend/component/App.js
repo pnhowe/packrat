@@ -23,7 +23,7 @@ class App extends React.Component
   constructor()
   {
     super();
-    this.packrat = new Packrat( window.API_HOST );
+    this.packrat = new Packrat( window.API_BASE_URI );
     this.packrat.cinp.server_error_handler = this.serverError;
   }
 

@@ -76,58 +76,58 @@ def load_repos():
 
   for release, tag in release_list:
     r = Repo( updated='2010-01-01T00:00:00.000Z', created='2010-01-01T00:00:00.000Z', description='APT - {0}'.format( release.title() ), manager_type='apt', name='apt-{0}'.format( release ), filesystem_dir='apt-{0}'.format( release ) )
-    r.distroversion_list = [ 'trusty', 'xenial', 'bionic' ]
     r.tag_id = tag
     r.full_clean()
     r.save()
+    r.distroversion_list = [ 'trusty', 'xenial', 'bionic' ]
 
   for release, tag in release_list:
     r = Repo( updated='2010-01-01T00:00:00.000Z', created='2010-01-01T00:00:00.000Z', description='YUM - {0}'.format( release.title() ), manager_type='yum', name='yum-{0}'.format( release ), filesystem_dir='yum-{0}'.format( release ) )
-    r.distroversion_list = [ 'rhel6', 'rhel7', 'rhel8', 'sles11', 'sles12' ]
     r.tag_id = tag
     r.full_clean()
     r.save()
+    r.distroversion_list = [ 'rhel6', 'rhel7', 'rhel8', 'sles11', 'sles12' ]
 
   for release, tag in release_list:
     r = Repo( updated='2010-01-01T00:00:00.000Z', created='2010-01-01T00:00:00.000Z', description='Docker - {0}'.format( release.title() ), manager_type='docker', name='docker-{0}'.format( release ), filesystem_dir='docker-{0}'.format( release ), show_only_latest=False )
-    r.distroversion_list = [ 'docker' ]
     r.tag_id = tag
     r.full_clean()
     r.save()
+    r.distroversion_list = [ 'docker' ]
 
   for release, tag in release_list:
     r = Repo( updated='2010-01-01T00:00:00.000Z', created='2010-01-01T00:00:00.000Z', description='PYPI - {0}'.format( release.title() ), manager_type='pypi', name='pypi-{0}'.format( release ), filesystem_dir='pypi-{0}'.format( release ), show_only_latest=False )
-    r.distroversion_list = [ 'pypi' ]
     r.tag_id = tag
     r.full_clean()
     r.save()
+    r.distroversion_list = [ 'pypi' ]
 
   for release, tag in release_list:
     r = Repo( updated='2010-01-01T00:00:00.000Z', created='2010-01-01T00:00:00.000Z', description='JSON - {0}'.format( release.title() ), manager_type='json', name='json-{0}'.format( release ), filesystem_dir='json-{0}'.format( release ), show_only_latest=False )
-    r.distroversion_list = list( OTHER_TYPE_LIST ) + [ 'resource', 'ova', 'respkg' ]
     r.tag_id = tag
     r.full_clean()
     r.save()
+    r.distroversion_list = list( OTHER_TYPE_LIST ) + [ 'resource', 'ova', 'respkg' ]
 
 
 def load_mirrors():
   m = Mirror( updated='2010-01-01T00:00:00.000Z', created='2010-01-01T00:00:00.000Z', name='prod', description='Production' )
+  m.full_clean()
+  m.save()
   repo_list = []
   for release in ( 'prod', ):
     for item in ( 'apt', 'yum', 'json', 'docker', 'pypi' ):
       repo_list.append( '{0}-{1}'.format( item, release ) )
   m.repo_list = repo_list
-  m.full_clean()
-  m.save()
 
   m = Mirror( updated='2010-01-01T00:00:00.000Z', created='2010-01-01T00:00:00.000Z', name='lab', description='Lab' )
+  m.full_clean()
+  m.save()
   repo_list = []
   for release in ( 'stage', 'dev' ):
     for item in ( 'apt', 'yum', 'json', 'docker', 'pypi' ):
       repo_list.append( '{0}-{1}'.format( item, release ) )
   m.repo_list = repo_list
-  m.full_clean()
-  m.save()
 
 
 def load():

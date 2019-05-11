@@ -4,11 +4,6 @@ SECRET_KEY = 'vgmxo603zkfltt(3oq(#%eewe=@dr-g$$r-9a_o!oh6@rr3w1a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-TEMPLATE_DEBUG = False
-
-TEMPLATE_DIRS = (
-)
-
 # Application definition
 
 INSTALLED_APPS = (
