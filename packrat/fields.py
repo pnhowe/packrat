@@ -12,6 +12,7 @@ MANAGER_TYPE_CHOICES = ( ( 'apt', 'APT' ), ( 'yum', 'YUM' ), ( 'json', 'JSON' ),
 
 # if these are changed (or any other field length), make sure to update the sqlite db in packrat-agent
 MANAGER_TYPE_LENGTH = 6
+FILE_VERSION_LENGTH = 50
 FILE_TYPE_LENGTH = 20
 FILE_ARCH_LENGTH = 6
 DISTRO_LENGTH = 6

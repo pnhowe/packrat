@@ -39,6 +39,7 @@ file = File( open( filepath, 'rb' ), os.path.basename( filepath ) )
 
 if options.list_distroversions:
   item_list = PackageFile.distroversionOptions( file, options.type )
+  print( 'Distro List' )
   for item in item_list:
     print( item )
 
@@ -58,6 +59,8 @@ if options.distroversion is None:
     print( 'Multiple distro versions detected.  One of the following must be specified' )
     for item in item_list:
       print( item )
+
+    sys.exit( 1 )
 
 else:
   distro_version = options.distroversion

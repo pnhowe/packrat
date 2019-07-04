@@ -10,7 +10,7 @@ from cinp.server_common import NotAuthorized
 from packrat.Attrib.models import Tag, DistroVersion
 from packrat.Repo.models import Repo
 from packrat.lib.info import infoDetect
-from packrat.fields import name_regex, filename_regex, USERNAME_LENGTH, FILE_ARCH_CHOICES, FILE_TYPE_LENGTH, FILE_ARCH_LENGTH
+from packrat.fields import name_regex, filename_regex, USERNAME_LENGTH, FILE_VERSION_LENGTH, FILE_ARCH_CHOICES, FILE_TYPE_LENGTH, FILE_ARCH_LENGTH
 
 cinp = CInP( 'Package', '2.0' )
 
@@ -63,7 +63,7 @@ class Package( models.Model ):
     return 'Package "{0}"'.format( self.name )
 
 
-@cinp.model( not_allowed_verb_list=( 'CREATE', 'UPDATE', 'DELETE' ), constant_set_map={ 'arch': FILE_ARCH_CHOICES }, property_list=( 'tags', ) )
+@cinp.model( not_allowed_verb_list=( 'CREATE', 'UPDATE', 'DELETE' ), constant_set_map={ 'arch': FILE_ARCH_CHOICES }, property_list=( 'tags', { 'name': 'raw_tag_list', 'type': 'Model', 'model': Tag, 'is_array': True } ) )
 class PackageFile( models.Model ):  # TODO: add delete to cleanup the file, django no longer does this for us
   """
   This is the Individual package "file", they can indivdually belong to any
@@ -90,7 +90,7 @@ class PackageFile( models.Model ):  # TODO: add delete to cleanup the file, djan
   """
   package = models.ForeignKey( Package, editable=False, on_delete=models.CASCADE )
   distroversion = models.ForeignKey( DistroVersion, editable=False, on_delete=models.PROTECT )
-  version = models.CharField( max_length=50, editable=False )
+  version = models.CharField( max_length=FILE_VERSION_LENGTH, editable=False )
   type = models.CharField( max_length=FILE_TYPE_LENGTH, editable=False )
   arch = models.CharField( max_length=FILE_ARCH_LENGTH, editable=False, choices=FILE_ARCH_CHOICES )
   justification = models.TextField()
@@ -109,6 +109,10 @@ class PackageFile( models.Model ):  # TODO: add delete to cleanup the file, djan
   @property
   def tags( self ):
     return ', '.join( [ i.name for i in self.tag_list.all().order_by( 'name' ) ] )
+
+  @property
+  def raw_tag_list( self ):
+    return self.tag_list
 
   def notify( self, tag_list=None ):
     """
@@ -240,12 +244,13 @@ class PackageFile( models.Model ):  # TODO: add delete to cleanup the file, djan
 
     return info.distroversion_list
 
-  @cinp.action( paramater_type_list=[ { 'type': '_USER_' }, { 'type': 'File', 'allowed_scheme_list': [ 'djfh' ] },
+  @cinp.action( return_type={ 'type': 'Model', 'model': 'packrat.Package.models.PackageFile' },
+                paramater_type_list=[ { 'type': '_USER_' }, { 'type': 'File', 'allowed_scheme_list': [ 'djfh' ] },
                                       { 'type': 'String' }, { 'type': 'String' }, { 'type': 'String' }, { 'type': 'String' } ] )
   @staticmethod
   def create( user, file, justification, provenance, distroversion, type=None ):
     """
-    Create a new PackageFile
+    Create a new PackageFile, returns URI to newly created PackageFile
     """
     if not filename_regex.match( file.name ):
       raise PackageException( 'INVALID_FILENAME', 'Invalid filename' )
@@ -263,6 +268,8 @@ class PackageFile( models.Model ):  # TODO: add delete to cleanup the file, djan
     result.loadfile( file, distroversion, type )
     result.full_clean()
     result.save()
+
+    return result
 
   @cinp.action( return_type={ 'type': 'Boolean' }, paramater_type_list=[ { 'type': 'String' } ] )
   @staticmethod
