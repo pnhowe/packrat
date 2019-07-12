@@ -298,6 +298,8 @@ class PackageFile( models.Model ):  # TODO: add delete to cleanup the file, djan
     queryset_parms = {}
     queryset_parms[ 'distroversion__in' ] = [ i.pk for i in repo.distroversion_list.all() ]
     queryset_parms[ 'tag_list' ] = repo.tag
+    queryset_parms[ 'failed_at__isnull' ] = True
+    queryset_parms[ 'deprocated_at__isnull' ] = True
 
     if package_list:  # not None, and not and empty string or empty list
       queryset_parms[ 'package_id__in' ] = package_list
