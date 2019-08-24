@@ -26,8 +26,9 @@ def load_tags():
 
 def load_users():
   User.objects.create_superuser( username='root', email='root@none.com', password='root' )
+
   u = User.objects.create_user( 'mcp', password='mcp' )
-  for name in ( 'can_tag', 'can_fail', 'tag_dev', 'tag_stage' ):
+  for name in ( 'can_tag', 'can_fail', 'tag_dev', 'tag_stage', 'delete_packagefile' ):
     u.user_permissions.add( Permission.objects.get( codename=name ) )
 
   u = User.objects.create_user( 'nullunit', password='nullunit' )

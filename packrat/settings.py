@@ -30,8 +30,12 @@ WSGI_APPLICATION = 'packrat.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/opt/packrat/db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'packrat',
+        'USER': 'packrat',
+        'PASSWORD': 'packrat',
+        'HOST': '127.0.0.1',
+        'PORT': '',
     }
 }
 

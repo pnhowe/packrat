@@ -75,10 +75,6 @@ class Repo( models.Model ):
     if timeout < 10:
       timeout = 10
 
-    if connection.vendor != 'postgresql':
-      time.sleep( timeout )
-      return []
-
     cursor = connection.cursor()
     cursor.execute( 'LISTEN "mirror_repo_{0}"'.format( self.pk ) )
     conn = cursor.cursor.connection
@@ -105,9 +101,6 @@ class Repo( models.Model ):
     """
     send the notify event to anything blocked in the poll
     """
-    if connection.vendor != 'postgresql':
-      return
-
     if package is None:  # this only works for Postgres
       connection.cursor().execute( 'NOTIFY "mirror_repo_{0}"'.format( self.pk ) )
     else:

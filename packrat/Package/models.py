@@ -39,8 +39,8 @@ class Package( models.Model ):
   - failed_count: the number of failed files to keep, oldest according to the failed_at field are removed first
   """
   name = models.CharField( max_length=200, primary_key=True )
-  deprocated_count = models.IntegerField( default=20 )
-  failed_count = models.IntegerField( default=10 )
+  deprocated_count = models.IntegerField( default=10 )
+  failed_count = models.IntegerField( default=5 )
   created = models.DateTimeField( editable=False, auto_now_add=True )
   updated = models.DateTimeField( editable=False, auto_now=True )
 
@@ -63,7 +63,7 @@ class Package( models.Model ):
     return 'Package "{0}"'.format( self.name )
 
 
-@cinp.model( not_allowed_verb_list=( 'CREATE', 'UPDATE', 'DELETE' ), constant_set_map={ 'arch': FILE_ARCH_CHOICES }, property_list=( 'tags', { 'name': 'raw_tag_list', 'type': 'Model', 'model': Tag, 'is_array': True } ) )
+@cinp.model( not_allowed_verb_list=( 'CREATE', 'UPDATE' ), constant_set_map={ 'arch': FILE_ARCH_CHOICES }, property_list=( 'tags', { 'name': 'raw_tag_list', 'type': 'Model', 'model': Tag, 'is_array': True } ) )
 class PackageFile( models.Model ):  # TODO: add delete to cleanup the file, django no longer does this for us
   """
   This is the Individual package "file", they can indivdually belong to any
@@ -327,6 +327,13 @@ class PackageFile( models.Model ):  # TODO: add delete to cleanup the file, djan
 
       return False
 
+    elif verb == 'DELETE':
+      for item in PackageFile.objects.filter( pk__in=id_list ):
+        if ( item.failed_at is not None ) or ( item.deprocated_at is not None ) or ( item.tags != '' ):  # Non super-users can not delete files that got off the ground
+          return False
+
+      return True
+
     else:
       return True
 
@@ -344,7 +351,7 @@ class PackageFile( models.Model ):  # TODO: add delete to cleanup the file, djan
 
   class Meta:
     unique_together = ( 'package', 'distroversion', 'version', 'type', 'arch' )
-    default_permissions = ( 'add', )
+    default_permissions = ( 'add', 'delete' )
     permissions = (
                     ( 'can_tag', 'Can add Tag' ),
                     ( 'can_untag', 'Can remove a Tag' ),

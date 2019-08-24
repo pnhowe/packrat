@@ -12,7 +12,7 @@ from optparse import OptionParser
 from django.core.files import File
 from packrat.Package.models import PackageFile
 
-oparser = OptionParser( description='Add Package File', usage="Usage: %prog [options] file" )
+oparser = OptionParser( description='Add Package File', usage='Usage: %prog [options] file' )
 
 oparser.add_option( '-l', '--list-distroversions', default=False, action='store_true' )
 

@@ -19,8 +19,8 @@ class Migration(migrations.Migration):
             name='Package',
             fields=[
                 ('name', models.CharField(max_length=200, primary_key=True, serialize=False)),
-                ('deprocated_count', models.IntegerField(default=20)),
-                ('failed_count', models.IntegerField(default=10)),
+                ('deprocated_count', models.IntegerField(default=10)),
+                ('failed_count', models.IntegerField(default=5)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
             ],
@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'permissions': (('can_tag', 'Can add Tag'), ('can_untag', 'Can remove a Tag'), ('can_fail', 'Can Mark a Package File as Failed'), ('can_unfail', 'Can Un-Mark a Package File as Failed'), ('can_deprocate', 'Can Mark a Package File as Deprocated'), ('can_undeprocate', 'Can Un-Mark a Package File as Deprocated')),
-                'default_permissions': ('add',),
+                'default_permissions': ('add', 'delete'),
             },
         ),
         migrations.CreateModel(
