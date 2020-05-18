@@ -258,7 +258,7 @@ class Other( PackageInfo ):  # This will take *anything* that has one (and only 
 
     parts = filename.split( '.' )
 
-    if parts[ -2 ] in COMPRESED_TYPE_LIST:  # to deal with things like '.tar.??', 'img.??'
+    if len( parts ) > 1 and parts[ -2 ] in COMPRESED_TYPE_LIST:  # to deal with things like '.tar.??', 'img.??'
       ( filename, _, _ ) = filename.rsplit( '.', 2 )
       type = parts[ -2 ]
 
