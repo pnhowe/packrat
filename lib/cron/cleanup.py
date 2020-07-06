@@ -24,7 +24,7 @@ for package in Package.objects.all():
     package_file.delete()
 
 # clean up files that are not refrenced
-good_list = [ i[0][2:] for i in PackageFile.objects.all().values_list( 'file' ) ]  # take off the ./
+good_list = [ i[0] for i in PackageFile.objects.all().values_list( 'file' ) ]
 
 for filename in os.listdir( settings.MEDIA_ROOT ):
   if filename not in good_list:

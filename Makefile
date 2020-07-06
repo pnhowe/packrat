@@ -6,14 +6,13 @@ all: build-ui
 install: install-ui
 	mkdir -p $(DESTDIR)/var/www/packrat/api
 	mkdir -p $(DESTDIR)/etc/apache2/sites-available
-	mkdir -p $(DESTDIR)/etc/packrat
 	mkdir -p $(DESTDIR)/usr/lib/packrat/cron
 	mkdir -p $(DESTDIR)/usr/lib/packrat/setup
 	mkdir -p $(DESTDIR)/usr/lib/packrat/util
 
 	install -m 644 api/packrat.wsgi $(DESTDIR)/var/www/packrat/api
 	install -m 644 apache.conf $(DESTDIR)/etc/apache2/sites-available/packrat.conf
-	install -m 644 master.conf.sample $(DESTDIR)/etc/packrat
+	install -m 644 packrat.conf.sample $(DESTDIR)/etc
 	install -m 755 lib/cron/* $(DESTDIR)/usr/lib/packrat/cron
 	install -m 755 lib/util/* $(DESTDIR)/usr/lib/packrat/util
 	install -m 755 lib/setup/* $(DESTDIR)/usr/lib/packrat/setup
@@ -48,7 +47,7 @@ ui/build/%:
 install-ui: build-ui
 	mkdir -p $(DESTDIR)/var/www/packrat/ui/
 	install -m 644 ui/build/* $(DESTDIR)/var/www/packrat/ui/
-	echo "window.API_BASE_URI = 'http://' + window.location.hostname;" > $(DESTDIR)/var/www/packrat/ui/env.js
+	echo "window.API_BASE_URI = window.location.protocol + '//' + window.location.host;" > $(DESTDIR)/var/www/packrat/ui/env.js
 
 clean-ui:
 	$(RM) -fr ui/build
@@ -63,7 +62,7 @@ test-requires:
 
 test-setup:
 	pip3 install -e .
-	cp master.conf.sample packrat/settings.py
+	cp packrat.conf.sample packrat/settings.py
 	su postgres -c"psql -c \"CREATE ROLE packrat WITH LOGIN PASSWORD 'packrat' CREATEDB\""
 
 lint:

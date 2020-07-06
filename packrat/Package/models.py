@@ -256,7 +256,7 @@ class PackageFile( models.Model ):  # TODO: add delete to cleanup the file, djan
       raise PackageException( 'INVALID_FILENAME', 'Invalid filename' )
 
     try:
-      PackageFile.objects.get( file='./{0}'.format( file.name ) )  # TODO: Figure out where the ./ is comming from and get rid of it, make sure to update the clean up script
+      PackageFile.objects.get( file=file.name )
       raise PackageException( 'FILENAME_USED', 'File name "{0}" allready used'.format( file.name ) )
     except PackageFile.DoesNotExist:
       pass
@@ -279,7 +279,7 @@ class PackageFile( models.Model ):  # TODO: add delete to cleanup the file, djan
     before uploading files to ensure the file name is unique.
     """
     try:
-      PackageFile.objects.get( file='./{0}'.format( file_name ) )  # TODO: see ./ comment in create
+      PackageFile.objects.get( file=file_name )
       return True
     except PackageFile.DoesNotExist:
       pass

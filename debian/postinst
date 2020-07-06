@@ -20,13 +20,13 @@ set -e
 
 case "$1" in
     configure)
-        if [ ! -f /etc/packrat/master.conf ] ;
+        if [ ! -f /etc/packrat.conf ] ;
         then
-          cp /etc/packrat/master.conf.sample /etc/packrat/master.conf
+          cp /etc/packrat.conf.sample /etc/packrat.conf
         fi
         if [ ! -h /usr/lib/python3/dist-packages/packrat/settings.py ] ;
         then
-          ln -sf /etc/packrat/master.conf /usr/lib/python3/dist-packages/packrat/settings.py
+          ln -sf /etc/packrat.conf /usr/lib/python3/dist-packages/packrat/settings.py
         fi
 
         /etc/init.d/cron reload
