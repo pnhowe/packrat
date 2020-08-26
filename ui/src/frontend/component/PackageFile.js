@@ -112,7 +112,7 @@ class PackageFile extends React.Component
                   <tr><th>Provenance</th><td>{ packageFile.provenance }</td></tr>
                   <tr><th>file</th><td><a href={ packageFile.file }>{ packageFile.file }</a></td></tr>
                   <tr><th>SHA256</th><td>{ packageFile.sha256 }</td></tr>
-                  <tr><th>Tags</th><td>{ packageFile.tags }</td></tr>
+                  <tr><th>Tags</th><td>{ packageFile.tags.join( ', ' ) }</td></tr>
                   <tr><th>Tag List</th><td><ul>{ packageFile.tag_list.map( ( item, index ) => <li key={ index }><Link to={ '/tag/' + CInP.extractIds( item ) }>{ item }</Link></li> ) }</ul></td></tr>
                   <tr><th>Created By</th><td>{ packageFile.created_by }</td></tr>
                   <tr><th>Deprocated By</th><td>{ packageFile.deprocated_by }</td></tr>
@@ -144,7 +144,7 @@ class PackageFile extends React.Component
             <TableRow key={ item.id } >
               <TableCell><Link to={ '/packagefile/' + item.id }>{ item.id }</Link></TableCell>
               <TableCell>{ item.version }</TableCell>
-              <TableCell>{ item.tags }</TableCell>
+              <TableCell>{ item.tags.join( ', ' ) }</TableCell>
               <TableCell>{ item.type }</TableCell>
               <TableCell>{ item.arch }</TableCell>
               <TableCell>{ item.failed } { item.deprocated }</TableCell>
