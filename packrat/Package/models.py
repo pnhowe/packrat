@@ -63,7 +63,7 @@ class Package( models.Model ):
     return 'Package "{0}"'.format( self.name )
 
 
-@cinp.model( not_allowed_verb_list=( 'CREATE', 'UPDATE' ), constant_set_map={ 'arch': FILE_ARCH_CHOICES }, property_list=( 'tags', { 'name': 'raw_tag_list', 'type': 'Model', 'model': Tag, 'is_array': True } ) )
+@cinp.model( not_allowed_verb_list=( 'CREATE', 'UPDATE' ), constant_set_map={ 'arch': FILE_ARCH_CHOICES }, property_list=( { 'name': 'tags', 'type': 'String', 'is_array': True }, { 'name': 'raw_tag_list', 'type': 'Model', 'model': Tag, 'is_array': True } ) )
 class PackageFile( models.Model ):  # TODO: add delete to cleanup the file, django no longer does this for us
   """
   This is the Individual package "file", they can indivdually belong to any
@@ -108,7 +108,7 @@ class PackageFile( models.Model ):  # TODO: add delete to cleanup the file, djan
 
   @property
   def tags( self ):
-    return ', '.join( [ i.name for i in self.tag_list.all().order_by( 'name' ) ] )
+    return [ i.name for i in self.tag_list.all().order_by( 'name' ) ]
 
   @property
   def raw_tag_list( self ):
@@ -173,6 +173,9 @@ class PackageFile( models.Model ):  # TODO: add delete to cleanup the file, djan
       raise PackageException( 'DEPROCATED/FAILED', 'Can not tag when deprocated or failed' )
 
     cur_tags = [ i.name for i in self.tag_list.all() ]
+
+    if tag.name in cur_tags:
+      raise PackageException( 'ALLREADY_TAGGED', 'Allready tagged with "{0}"'.format( tag.name ) )
 
     for item in tag.required_list.all():
       if item.name not in cur_tags:
